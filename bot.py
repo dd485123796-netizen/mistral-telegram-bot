@@ -6,7 +6,7 @@ from telegram.ext import Application, CommandHandler, MessageHandler, filters, C
 logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-TOKEN = "8754092410:AAGg_qzEoSpExWxDvNIwZEvPr1CJJdYURVk"
+TOKEN = "8754092410:AAGg_qzEoSpExWxDVNIwZEvPr1CJJdYURVk"
 MISTRAL_KEY = "vcveCGvkIYK9ck8aAcguzoT57QgbJlsT"  # обязательно замени на новый после запуска
 
 def ask_mistral(user_text):
