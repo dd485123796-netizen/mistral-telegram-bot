@@ -1,3 +1,4 @@
+import asyncio
 import logging
 import requests
 from telegram import Update
@@ -25,7 +26,7 @@ def ask_mistral(user_text):
     }
     try:
         resp = requests.post(url, headers=headers, json=data, timeout=30)
-        resp.raise_for_status()  # вызовет ошибку, если статус не 200
+        resp.raise_for_status()
         result = resp.json()
         return result["choices"][0]["message"]["content"]
     except Exception as e:
@@ -39,13 +40,13 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
     reply = ask_mistral(user_text)
     await update.message.reply_text(reply)
 
-def main():
+async def main():
     print("Создаю приложение...")
     app = Application.builder().token(TOKEN).build()
     app.add_handler(CommandHandler("start", start))
     app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handle_message))
     print("Запускаю polling...")
-    app.run_polling()
+    await app.run_polling()
 
 if __name__ == "__main__":
-    main()
+    asyncio.run(main())
