@@ -1,4 +1,3 @@
-import asyncio
 import logging
 import requests
 from telegram import Update
@@ -7,30 +6,19 @@ from telegram.ext import Application, CommandHandler, MessageHandler, filters, C
 logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-# Твой Telegram-токен
 TOKEN = "8754092410:AAGg_qzEoSpExWxDvNIwZEvPr1CJJdYURVk"
-
-# Ключ Mistral (потом обязательно замени на новый)
-MISTRAL_KEY = "vcveCGvkIYK9ck8aAcguzoT57QgbJlsT"
+MISTRAL_KEY = "vcveCGvkIYK9ck8aAcguzoT57QgbJlsT"  # обязательно замени на новый после запуска
 
 def ask_mistral(user_text):
-    """Отправляет запрос в Mistral API и возвращает ответ"""
     url = "https://api.mistral.ai/v1/chat/completions"
-    headers = {
-        "Authorization": f"Bearer {MISTRAL_KEY}",
-        "Content-Type": "application/json"
-    }
-    data = {
-        "model": "mistral-large-latest",
-        "messages": [{"role": "user", "content": user_text}]
-    }
+    headers = {"Authorization": f"Bearer {MISTRAL_KEY}", "Content-Type": "application/json"}
+    data = {"model": "mistral-large-latest", "messages": [{"role": "user", "content": user_text}]}
     try:
         resp = requests.post(url, headers=headers, json=data, timeout=30)
         resp.raise_for_status()
-        result = resp.json()
-        return result["choices"][0]["message"]["content"]
+        return resp.json()["choices"][0]["message"]["content"]
     except Exception as e:
-        return f"Ошибка при запросе к Mistral: {str(e)}"
+        return f"Ошибка: {str(e)}"
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text("Привет! Я ИИ-бот. Задай мне любой вопрос.")
